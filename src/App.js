@@ -1,4 +1,4 @@
-import React, { useRef, useReducer, useMemo, useCallback } from "react";
+import React, { useRef, useReducer, useMemo, useCallback, createContext } from "react";
 import UserList from "./UserList";
 import CreateUser from "./CreateUser";
 import "./App.css";
@@ -52,58 +52,28 @@ function reducer(state, action){
       throw new Error('Unhandled action');
   }
 }
+
+export const UserDispatch = createContext(null);
+
 const App = () => {
-  const nextId = useRef(4);
+ 
   const [state, dispatch] = useReducer(reducer, initalState);
-  const [form, onChange, reset] = useInputs({
-    username: '', 
-    email: ''
-  });
-  const { username, email } = form;
   const { users } = state;
-
-  const onCreate = useCallback( () => {
-    dispatch({
-      type: 'CREATE_USER',
-      user: {
-        id: nextId.current,
-        username,
-        email
-      }
-    })
-    nextId.current += 1;
-    reset();
-  }, [username, email, reset]);
-
-  const onToggle = useCallback( (id) => {
-    dispatch({
-      type: 'TOGGLE_USER',
-      id
-    })
-  }, []);
-
-  const onRemove = useCallback( (id) => {
-    dispatch({
-      type: 'REMOVE_USER',
-      id
-    })
-  }, []);
 
   const count = useMemo(() => countActiveUsers(state.users), [state.users]);
 
   return (
+    <UserDispatch.Provider value={dispatch}>
+    
     <div className="App">
       <CreateUser 
-        username={username} 
-        email={email} 
-        onChange={onChange} 
-        onCreate={onCreate} />
+        />
       <UserList 
         users={users}
-        onToggle={onToggle}
-        onRemove={onRemove} />
+        />
       <div>활성화된 사용자 수 : {count}</div>
     </div>
+    </UserDispatch.Provider>
   );
 }
 
