@@ -1,9 +1,10 @@
 import React, { useReducer, useMemo, createContext } from 'react';
+import produce from 'immer';
+
 import UserDispatch from './UserContext';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 import './App.css';
-import produce from 'immer';
 
 window.produce = produce;
 
