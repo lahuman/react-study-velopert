@@ -3,6 +3,8 @@ import styled, { css, ThemeProvider } from 'styled-components';
 
 import CheckBox from './components/Checkbox';
 import Buttons2 from './components/Button2';
+import Dialog from './components/Dialog';
+import { showReportDialog } from '@sentry/browser';
 
 const Circle = styled.div`
   width: 5rem;
@@ -45,6 +47,22 @@ function App() {
     setCheck(e.target.checked);
   };
 
+  const [dialog, setDialog] = useState(false);
+
+  const onClick = () => {
+    setDialog(true);
+  };
+
+  const onConfirm = () => {
+    console.log('onConfirm');
+    setDialog(false);
+  };
+
+  const onCancel = () => {
+    console.log('onCancel');
+    setDialog(false);
+  };
+
   return (
     <ThemeProvider theme={{ palette }}>
       <AppBlock>
@@ -54,27 +72,37 @@ function App() {
           <Buttons2 size="small">BUTTON</Buttons2>
         </ButtonGroup>
         <ButtonGroup>
-          <Buttons2 color="gray" size="large">
+          <Buttons2 outline color="gray" size="large">
             BUTTON
           </Buttons2>
-          <Buttons2 color="gray" size="medium">
+          <Buttons2 outline color="gray" size="medium">
             BUTTON
           </Buttons2>
-          <Buttons2 color="gray" size="small">
+          <Buttons2 outline color="gray" size="small">
             BUTTON
           </Buttons2>
         </ButtonGroup>
         <ButtonGroup>
-          <Buttons2 color="pink" size="large">
+          <Buttons2 onClick={onClick} fullWidth color="pink" size="large">
             BUTTON
           </Buttons2>
-          <Buttons2 color="pink" size="medium">
+          <Buttons2 fullWidth color="pink" size="medium">
             BUTTON
           </Buttons2>
-          <Buttons2 color="pink" size="small">
+          <Buttons2 fullWidth color="pink" size="small">
             BUTTON
           </Buttons2>
         </ButtonGroup>
+        <Dialog
+          title="정말로 삭제하시겠습니까?"
+          confirmText="삭제"
+          cancelText="취소"
+          visible={dialog}
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+        >
+          데이터를 정말로 삭제하시겠습니까?
+        </Dialog>
       </AppBlock>
       {
         // <Circle color="blue" huge />
